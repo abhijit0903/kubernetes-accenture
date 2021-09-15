@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tomcat
+  labels:
+    app: cas
+    version: v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+       app: cas
+  template:
+    metadata:
+      labels:
+        app: cas
+        tier: frontend
+        version: v1
+    spec:
+      containers:
+      - image: tomcat
+        name: tomcat
+        volumeMounts:
+        - name: cas-configmap-tomcat
+          mountPath: /etc/tomcat
+        ports:
+        - containerPort: 8080
+      volumes:
+      - name: cas-configmap-tomcat
+        configMap:
+         name: cas-configmap-tomcat
